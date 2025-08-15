@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 
-A fast and accurate macro for automating QTE (Quick Time Event) sequences in Roblox games. Uses multi-threaded screen capture and predictive clicking for high-speed precision.
+A fast and accurate macro for automating the QTE (Quick Time Event) sequence in Huzz RNG. Uses multi-threaded screen capture and predictive clicking for high-speed precision.
 
 ---
 
