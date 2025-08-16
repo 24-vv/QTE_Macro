@@ -1,4 +1,4 @@
-# QTE Macro for Huzz RNG
+# QTE Macro for Huzz RNG | v2.0
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 
@@ -8,9 +8,10 @@ A fast and accurate macro for automating the QTE (Quick Time Event) sequence in 
 
 ## Features
 
-- Real-time screen capture for high responsiveness
-- Predictive bar clicking to reduce misses
-- Modular design for easy maintenance and future development
+- Real-time, multi-threaded screen capture for high responsiveness
+- Predictive bar clicking with smoothed speed calculation
+- Dynamic target width handling for shrinking/growing targets
+- HSV color filtering and morphological cleaning to reduce false positives
 - Live detection visualization (optional)
 - Lightweight and efficient
 
@@ -51,10 +52,26 @@ pip install -r requirements.txt
 
 ## Configuration
 
-- The screen capture region is set in main.py with qte_region. Adjust the coordinates if your resolution or UI layout differs.
-- Color thresholds for the bar and target are in `main.py` as `bar_lower`, `bar_upper`, `target_lower`, and `target_upper`. Adjust if needed.
+- The screen capture region is set in main.py with `qte_region`. Adjust the coordinates if your resolution or UI layout differs.
+- Adjust `bar_hsv_lower`, `bar_hsv_upper`, `target_hsv_lower`, and `target_hsv_upper` if game colors change.
 
 ## Notes
 
 - The macro only handles the QTE itself; it does not automate any menu buttons like “Play Hard.” (yet)
 - Multi-threaded capture ensures high frame rates for fast-moving bars.
+
+## Changelog
+
+**v2.0 (Current)**
+- Switched to HSV color detection for better robustness
+- Added morphological cleaning to reduce false positives
+- Smoothed speed prediction with moving average over last 5 frames
+- Dynamic target width handling
+- Added safety checks for `predicted_x` to prevent crashes
+- Improved Roblox window activation handling
+
+**v1.0**
+- Original RGB-based QTE automation
+- Basic predictive clicking
+- Single-threaded capture
+- Worked best with consistent target size and moderate speed

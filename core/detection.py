@@ -4,16 +4,21 @@ from collections import deque
 import time
 
 class Detection:
-    def __init__(self, bar_lower, bar_upper, target_lower, target_upper):
-        self.bar_lower = np.array(bar_lower)
-        self.bar_upper = np.array(bar_upper)
-        self.target_lower = np.array(target_lower)
-        self.target_upper = np.array(target_upper)
+    def __init__(self, bar_hsv_lower, bar_hsv_upper, target_hsv_lower, target_hsv_upper):
+        self.bar_lower = np.array(bar_hsv_lower)
+        self.bar_upper = np.array(bar_hsv_upper)
+        self.target_lower = np.array(target_hsv_lower)
+        self.target_upper = np.array(target_hsv_upper)
         self.bar_history = deque(maxlen=5)
 
     def process_frame(self, frame):
-        bar_mask = cv2.inRange(frame, self.bar_lower, self.bar_upper)
-        target_mask = cv2.inRange(frame, self.target_lower, self.target_upper)
+        hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        bar_mask = cv2.inRange(hsv_frame, self.bar_lower, self.bar_upper)
+        target_mask = cv2.inRange(hsv_frame, self.target_lower, self.target_upper)
+
+        bar_mask = cv2.morphologyEx(bar_mask, cv2.MORPH_OPEN, np.ones((3,3), np.uint8))
+        target_mask = cv2.morphologyEx(target_mask, cv2.MORPH_OPEN, np.ones((3,3), np.uint8))
 
         bar_contours, _ = cv2.findContours(bar_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         target_contours, _ = cv2.findContours(target_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -40,9 +45,12 @@ class Detection:
 
     def predict_bar_position(self):
         if len(self.bar_history) >= 2:
-            x1, t1 = self.bar_history[-2]
-            x2, t2 = self.bar_history[-1]
-            speed = (x2 - x1) / max(t2 - t1, 0.0001)
-            predicted_x = x2 + speed * 0.015
+            speeds = []
+            for i in range(1, len(self.bar_history)):
+                x1, t1 = self.bar_history[i-1]
+                x2, t2 = self.bar_history[i]
+                speeds.append((x2 - x1)/(t2-t1 + 1e-5))
+            avg_speed = sum(speeds)/len(speeds)
+            predicted_x = self.bar_history[-1][0] + avg_speed * 0.015
             return predicted_x
         return None
