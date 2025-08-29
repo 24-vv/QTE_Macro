@@ -1,6 +1,8 @@
 # QTE Macro for Huzz RNG | v2.0
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![GitHub License](https://img.shields.io/github/license/gangstayencoin/QTE_Macro)
+
 
 A fast and accurate macro for automating the QTE (Quick Time Event) sequence in Huzz RNG. Uses multi-threaded screen capture and predictive clicking for high-speed precision.
 
