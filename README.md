@@ -1,4 +1,4 @@
-# QTE Macro for Huzz RNG | v2.0
+# QTE Macro for Huzz RNG | v2.0 [OUTDATED]
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![GitHub License](https://img.shields.io/github/license/gangstayencoin/QTE_Macro)
